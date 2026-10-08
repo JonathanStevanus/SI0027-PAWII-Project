@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa/{{mahasiswaId}}"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      // TODO 5: tambahkan pm.test yang memeriksa status code 200
+
+      // TODO 6: tambahkan pm.test yang memastikan data memiliki
+      // properti 'nama'
+    language: text/javascript
+order: 3000

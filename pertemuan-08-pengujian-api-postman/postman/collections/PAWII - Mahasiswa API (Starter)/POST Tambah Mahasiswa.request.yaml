@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{base_url}}/mahasiswa"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "nama": "Citra",
+      "jurusan": "Sistem Informasi"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      // TODO 3: tambahkan pm.test yang memeriksa status code 201
+
+      // TODO 4: simpan id dari response ke environment variable
+      // 'mahasiswaId' menggunakan pm.environment.set(), agar dapat
+      // dipakai oleh request 'GET Satu Mahasiswa' di bawah ini
+    language: text/javascript
+order: 2000

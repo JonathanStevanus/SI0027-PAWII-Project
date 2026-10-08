@@ -1,19 +1,19 @@
 
 
-const mahasiswaModel = require("../models/mahasiswaModel");
+const dosenModel = require("../models/dosenModel");
 
 exports.getAll = (req, res) => {
-  res.json(mahasiswaModel.getAll());
+  res.json(dosenModel.getAll());
 };
 
 exports.getById = (req, res) => {
   const id = parseInt(req.params.id);
-  const data = mahasiswaModel.getById(id);
+  const data = dosenModel.getById(id);
   if (!data) return res.status(404).json({ message: "Tidak ditemukan" });
   res.json(data);
 };
 
 exports.create = (req, res) => {
-  const baru = mahasiswaModel.create(req.body);
+  const baru = dosenModel.create(req.body);
   res.status(201).json(baru);
 };
