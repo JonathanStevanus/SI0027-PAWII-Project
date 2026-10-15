@@ -2,52 +2,73 @@
 // TODO 2: lengkapi setiap handler agar memanggil Model Mongoose yang sesuai.
 
 const Mahasiswa = require("../models/mahasiswaModel");
+const mongoose = require("mongoose");
 
 exports.getAll = async (req, res) => {
-const data = await Mahasiswa.find().populate('prodiId');
-res.json(data);
+  try {
+    const data = await Mahasiswa.find().populate("prodiId");
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.getById = async (req, res) => {
- const data = await Mahasiswa.findById(req.params.id).populate('prodiId');
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(404).json({ message: "Tidak ditemukan" });
+  }
 
-if (!data) return res.status(404).json({ pesan: 'Tidak ditemukan' });
+  try {
+    const data = await Mahasiswa.findById(req.params.id).populate("prodiId");
 
-res.json(data);
+    if (!data) return res.status(404).json({ message: "Tidak ditemukan" });
+
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.create = async (req, res) => {
-try {
-
-
-res.status(201).json(mahasiswa);
-
-} catch (err) {
-
-res.status(400).json({ pesan: err.message });
-
-}
+  try {
+    const mahasiswa = await Mahasiswa.create(req.body);
+    res.status(201).json(mahasiswa);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 };
 
 exports.update = async (req, res) => {
   try {
- const data = await Mahasiswa.findByIdAndUpdate(
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(404).json({ message: "Tidak ditemukan" });
+    }
 
-  req.params.id, req.body, { new: true, runValidators: true }
+    const data = await Mahasiswa.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
 
-);
+    if (!data) return res.status(404).json({ message: "Tidak ditemukan" });
 
-res.json(data);
- }catch(err){
-  res.status(400).json({ pesan: err.message });
- }
-
+    res.json(data);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 };
 
 exports.remove = async (req, res) => {
-const data = await Mahasiswa.findById(req.params.id)
-if (!data) return res.status(404).json({ pesan: 'Tidak ditemukan' });
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(404).json({ message: "Tidak ditemukan" });
+  }
 
-await Mahasiswa.findByIdAndDelete(req.params.id);
-res.status(204).send();
+  try {
+    const data = await Mahasiswa.findByIdAndDelete(req.params.id);
+    if (!data) return res.status(404).json({ message: "Tidak ditemukan" });
+
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
